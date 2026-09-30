@@ -88,7 +88,7 @@
             transition: opacity 1.2s ease !important;
         }
 
-        /* Capa intro y gran final a blanco optimizada */
+        /* Capa intro con animación de entrada de blanco a negro */
         #intro-overlay {
             position: fixed;
             top: 0;
@@ -99,7 +99,7 @@
             z-index: 9999;
             pointer-events: none;
             opacity: 1;
-            transition: opacity 1s ease;
+            transition: opacity 1s ease, background-color 1.2s ease;
         }
 
         /* Navegación Top Bar */
@@ -277,7 +277,7 @@
             color: var(--accent);
             text-transform: uppercase;
             min-height: 2.2rem;
-            -webkit-text-stroke: 0.5px #000000; /* Delineado negro de 0.5px solo para la tarjeta blanca */
+            -webkit-text-stroke: 0.5px #000000;
         }
 
         .seq-card:hover { transform: translateY(20px) scale(1.05); }
@@ -414,7 +414,7 @@
         .modal-close-btn {
             color: var(--accent);
             cursor: pointer;
-            text-decoration: underline; /* Subrayado para la palabra 'Cerrar.' en los modales */
+            text-decoration: underline;
             transition: color 0.3s ease;
         }
 
@@ -493,7 +493,6 @@
             color: #e2e8f0;
         }
 
-        /* MEDIA QUERIES PARA MÓVILES */
         @media (max-width: 768px) {
             .submodal-close { 
                 top: -15px; 
@@ -519,7 +518,6 @@
 
     <audio id="bg-music" src="Tango_Futuro_(Lado_B).mp3" loop preload="auto"></audio>
     <div id="bg-layer"></div>
-    <!-- Canvas para la Lluvia Matrix -->
     <canvas id="matrix-canvas"></canvas>
     <div id="intro-overlay"></div>
 
@@ -582,12 +580,10 @@
     </footer>
 
     <script>
-        // Solución caché (bfcache)
         window.addEventListener('pageshow', (event) => {
             if (event.persisted) window.location.reload();
         });
 
-        // ESTRUCTURA BASADA EN BLOQUES (CONTENT)
         const storyData = [
             {
                 title: "INTEGRIDAD DEL CONOCIMIENTO.",
@@ -690,7 +686,6 @@
         let isTyping = false;
         let isCardBusy = true; 
 
-        // Generador del Código Matrix Dorado
         let matrixInterval = null;
         function startMatrixRain() {
             const canvas = document.getElementById('matrix-canvas');
@@ -737,7 +732,6 @@
             matrixInterval = setInterval(draw, 33);
         }
 
-        // Función para desvanecer elementos e iniciar la lluvia Matrix
         function triggerMatrixAndFadeElements() {
             const bgLayer = document.getElementById('bg-layer');
             if (bgLayer) bgLayer.style.opacity = '0';
@@ -761,7 +755,6 @@
 
         let globalColorInterval = null;
 
-        // Función para activar el hipervínculo final (Corregida sin congelamientos GPU)
         function enableFinalHyperlink() {
             const wordContainer = document.getElementById('word-quimera');
             const letters = wordContainer.querySelectorAll('span');
@@ -806,15 +799,12 @@
             wordContainer.onclick = () => {
                 clearTimeout(globalColorInterval);
 
-                // 1. Aplica un desenfoque global único al cuerpo
                 document.body.classList.add('blurring');
 
-                // 2. Transición a blanco suave utilizando el overlay
                 const overlay = document.getElementById('intro-overlay');
                 overlay.style.backgroundColor = '#ffffff';
                 overlay.style.opacity = '1';
 
-                // 3. Redirección limpia tras 1000ms
                 setTimeout(() => {
                     window.location.href = "https://quimerac3.github.io/QuimeraC3-Q/";
                 }, 1000);
@@ -926,8 +916,6 @@
                 isTyping = true;
 
                 const data = storyData[currentStep];
-                
-                // Alineación personalizada según el bloque
                 modalBody.style.textAlign = data.align || 'left';
                 
                 await typeSection(modalTitle, data.title, 20);
@@ -1176,19 +1164,23 @@ Resolver un problema no es el final del conocimiento; es el comienzo de una preg
             fullscreenToggle.textContent = !document.fullscreenElement ? '⛶ Pantalla Completa' : '❌ Salir Pantalla Completa';
         });
 
+        /* --- ANIMACIÓN DE ENTRADA PRINCIPIO (BLANCO A NEGRO) Y SECUENCIA DE ELEMENTOS --- */
         window.addEventListener('DOMContentLoaded', () => {
             const overlay = document.getElementById('intro-overlay');
             
+            // 1. Inicia el desvanecimiento de blanco a negro de la pantalla completa
             setTimeout(() => {
                 overlay.style.backgroundColor = '#000000';
             }, 100);
 
+            // 2. Una vez asentado el negro, se revela el fondo (bg-layer) y se remueve el overlay
             setTimeout(() => {
                 document.getElementById('bg-layer').style.opacity = '1';
                 overlay.style.opacity = '0';
-            }, 1000);
+            }, 1300);
 
-            setTimeout(() => { document.querySelector('.top-bar').style.opacity = '1'; }, 2000);
+            // 3. Continúa el flujo sincronizado de animaciones
+            setTimeout(() => { document.querySelector('.top-bar').style.opacity = '1'; }, 2300);
             
             setTimeout(() => {
                 const brandLogo = document.querySelector('.brand-logo');
@@ -1202,7 +1194,7 @@ Resolver un problema no es el final del conocimiento; es el comienzo de una preg
                     }
                 }
                 typeBrandLogo();
-            }, 2500);
+            }, 2800);
 
             document.querySelector('.brand-logo').addEventListener('click', (e) => {
                 e.preventDefault();
@@ -1215,14 +1207,14 @@ Resolver un problema no es el final del conocimiento; es el comienzo de una preg
                 }, 1000);
             });
 
-            setTimeout(() => { document.querySelector('header').style.opacity = '1'; }, 3300);
+            setTimeout(() => { document.querySelector('header').style.opacity = '1'; }, 3600);
             
-            setTimeout(async () => { await typeHeaderTitle(); }, 3600);
+            setTimeout(async () => { await typeHeaderTitle(); }, 3900);
 
             setTimeout(async () => {
                 const subP = document.querySelector('header p');
                 await typeSection(subP, subP.dataset.text, 15);
-            }, 5000);
+            }, 5300);
             
             setTimeout(() => {
                 centralCard.style.display = 'block';
@@ -1259,7 +1251,7 @@ Resolver un problema no es el final del conocimiento; es el comienzo de una preg
                     }, 600);
 
                 }, 600);
-            }, 6000); 
+            }, 6300); 
         });
     </script>
 </body>
