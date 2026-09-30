@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRINCIPIOS DE QUIMERA &bull; Ecosistema Científico y Académico</title>
+    <style>
+        :root {
+            --text-main: #0f172a;
+            --primary: #0f766e;
+            --accent: #c88b32; /* Cobre Dorado */
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+            
+            --card-bg: rgba(15, 23, 42, 0.90);
+            --card-border: rgba(255, 255, 255, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            background-color: #000000;
+            transition: filter 1s ease;
+        }
+
+        /* Desenfoque global ligero y fluido */
+        body.blurring {
+            filter: blur(12px);
+        }
+
+        /* Transición de desenfoque general */
+        #bg-layer, header, main, .top-bar, footer {
+            transition: filter 0.5s ease, opacity 500ms ease;
+        }
+
+        body.modal-blur-active #bg-layer,
+        body.modal-blur-active header,
+        body.modal-blur-active main,
+        body.modal-blur-active .top-bar,
+        body.modal-blur-active footer {
+            filter: blur(8px);
+        }
+
+        /* Capa de fondo */
+        #bg-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: linear-gradient(rgba(15, 23, 42, 0.0), rgba(15, 23, 42, 0.0)), url('Quimera_Principios.webp');
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
+            opacity: 0;
+            transition: opacity 1000ms ease, filter 0.5s ease;
+        }
+
+        /* Canvas para Lluvia de Código Matrix */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
+
+        /* Clase de desvanecimiento a negro para elementos de la interfaz */
+        .fade-out-element {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transition: opacity 1.2s ease !important;
+        }
+
+        /* Capa intro y gran final a blanco optimizada */
+        #intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #ffffff;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 1;
+            transition: opacity 1s ease;
+        }
+
+        /* Navegación Top Bar */
+        .top-bar, header, footer {
+            opacity: 0;
+            transition: opacity 500ms ease, filter 0.5s ease;
+        }
+
+        .top-bar {
+            background-color: rgba(11, 19, 41, 0.0);
+            padding: 0.85rem 2rem;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .top-bar-container {
+            max-width: 100%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-logo {
+            color: #ffffff;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(0.85rem, 2vw, 1rem);
+            font-weight: 700;
+            text-decoration: none;
+            letter-spacing: -0.01em;
+            transition: color 0.2s ease, opacity 500ms ease;
+        }
+
+        .brand-logo:hover {
+            color: #38bdf8;
+            text-decoration: underline;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: clamp(0.5rem, 2vw, 1.25rem);
+            list-style: none;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: clamp(0.75rem, 1.5vw, 0.9rem);
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: #38bdf8;
+        }
+        
+        #audio-toggle, #fullscreen-toggle {
+            background: rgba(15, 118, 110, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: opacity 500ms ease;
+        }
+
+        #audio-toggle:hover, #fullscreen-toggle:hover {
+            background: var(--accent);
+            color: #ffffff;
+        }
+
+        /* HEADER ESTRUCTURAL */
+        header {
+            font-family: Georgia, serif;
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 6vh 2rem 1rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        header h1 {
+            font-family: Georgia, serif;
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #ffffff;
+            line-height: 1.3;
+            margin: 0;
+            text-align: center;
+            width: 100%;
+        }
+        
+        /* PALABRA PRINCIPIOS */
+        #header-line1 {
+            color: #e2a547;
+            display: inline-block;
+            font-size: clamp(2.5rem, 10vw, 6rem); 
+            transition: color 0.3s ease;
+            line-height: 1.1;
+            -webkit-text-stroke: 1.5px #ffffff;
+            text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .arrow-02-text {
+            margin-top: clamp(12vh, 17vh, 20vh);
+            margin-bottom: 1rem;
+        }
+
+        /* PALABRA QUIMERA */
+        #word-quimera {
+            display: inline-block;
+            font-size: clamp(2.5rem, 10vw, 6rem);
+            transition: color 0.3s ease;
+            line-height: 1.1;
+            -webkit-text-stroke: 1.5px #000000;
+            text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        header p {
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            color: #e2e8f0;
+            margin: 0;
+            text-align: center;
+            max-width: 750px;
+        }
+
+        .hidden-letter {
+            opacity: 0;
+            display: inline-block;
+            transition: color 0.4s ease;
+        }
+        .hidden-letter.revealed {
+            opacity: 1;
+        }
+
+        /* TARJETA CENTRAL */
+        main {
+            flex: 1;
+            display: flex;
+            align-items: flex-end; 
+            justify-content: center;
+            padding: 2rem 2rem 12vh 2rem; 
+            z-index: 10;
+            position: relative;
+            transition: filter 0.5s ease;
+        }
+
+        .seq-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: clamp(1.5rem, 4vw, 2rem) clamp(1.5rem, 5vw, 3rem);
+            box-shadow: var(--shadow-lg);
+            cursor: pointer;
+            text-align: center;
+            transition: transform 0.3s ease, opacity 0.5s ease;
+            display: none;
+            max-width: 600px;
+            width: 100%;
+            transform: translateY(20px);
+        }
+
+        .seq-card h2 {
+            font-family: Georgia, serif;
+            font-size: clamp(1.2rem, 3.5vw, 1.6rem);
+            color: var(--accent);
+            text-transform: uppercase;
+            min-height: 2.2rem;
+            -webkit-text-stroke: 0.5px #000000; /* Delineado negro de 0.5px solo para la tarjeta blanca */
+        }
+
+        .seq-card:hover { transform: translateY(20px) scale(1.05); }
+
+        .tv-on-card { animation: tvTurnOnCard 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+        .tv-off-card { animation: tvTurnOffCard 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+
+        @keyframes tvTurnOnCard {
+            0% { transform: translateY(20px) scale(0, 0); opacity: 0; filter: brightness(10); }
+            40% { transform: translateY(20px) scale(0.001, 0.005); opacity: 1; filter: brightness(5); }
+            70% { transform: translateY(20px) scale(1, 0.005); opacity: 1; filter: brightness(2); }
+            100% { transform: translateY(20px) scale(1, 1); opacity: 1; filter: brightness(1); }
+        }
+
+        @keyframes tvTurnOffCard {
+            0% { transform: translateY(20px) scale(1, 1); opacity: 1; filter: brightness(1); }
+            40% { transform: translateY(20px) scale(1, 0.005); opacity: 1; filter: brightness(2); }
+            70% { transform: translateY(20px) scale(0.001, 0.005); opacity: 1; filter: brightness(5); }
+            100% { transform: translateY(20px) scale(0, 0); opacity: 0; filter: brightness(10); }
+        }
+
+        /* MODALES */
+        .modal-overlay, .submodal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .modal-overlay, .submodal-overlay {
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+        }
+
+        .submodal-overlay {
+            z-index: 3000;
+            transition: opacity 0.5s ease;
+        }
+
+        .modal-overlay.show, .submodal-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-window, .submodal-text-window {
+            background: var(--card-bg);
+            padding: clamp(1.5rem, 5vw, 3rem);
+            border-radius: 12px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--card-border);
+        }
+
+        .submodal-text-window {
+            display: none;
+        }
+
+        .tv-on { animation: tvTurnOn 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards !important; }
+        .tv-off { animation: tvTurnOff 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards !important; }
+
+        @keyframes tvTurnOn {
+            0% { transform: scale(0, 0); opacity: 0; filter: brightness(10); }
+            40% { transform: scale(0.001, 0.005); opacity: 1; filter: brightness(5); }
+            70% { transform: scale(1, 0.005); opacity: 1; filter: brightness(2); }
+            100% { transform: scale(1, 1); opacity: 1; filter: brightness(1); }
+        }
+
+        @keyframes tvTurnOff {
+            0% { transform: scale(1, 1); opacity: 1; filter: brightness(1); }
+            40% { transform: scale(1, 0.005); opacity: 1; filter: brightness(2); }
+            70% { transform: scale(0.001, 0.005); opacity: 1; filter: brightness(5); }
+            100% { transform: scale(0, 0); opacity: 0; filter: brightness(10); }
+        }
+
+        .modal-title {
+            font-family: Georgia, "Times New Roman", serif;
+            font-weight: bold;
+            color: var(--accent);
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 0.5rem;
+            min-height: 2.5rem;
+            text-align: center;
+        }
+
+        .modal-body {
+            font-size: clamp(0.9rem, 2vw, 1.02rem);
+            color: #f1f5f9;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            white-space: pre-line;
+            min-height: 100px;
+        }
+
+        .modal-body a {
+            color: var(--accent);
+            font-weight: bold;
+            text-decoration: underline;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .modal-body a:hover { color: #e0a96d; }
+
+        .process-flow {
+            background-color: rgba(15, 118, 110, 0.2);
+            color: #5eead4;
+            border-left: 4px solid var(--primary);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            font-weight: bold;
+            font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+            text-align: center;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .modal-close-wrapper {
+            text-align: right;
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            font-weight: bold;
+            min-height: 2rem;
+        }
+
+        .modal-close-btn {
+            color: var(--accent);
+            cursor: pointer;
+            text-decoration: underline; /* Subrayado para la palabra 'Cerrar.' en los modales */
+            transition: color 0.3s ease;
+        }
+
+        .modal-close-btn:hover { 
+            color: #e0a96d;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: clamp(1rem, 2.5vw, 1.2rem);
+            background-color: var(--accent);
+            vertical-align: text-bottom;
+            animation: blink 1s step-end infinite;
+            margin-left: 2px;
+            opacity: 0; 
+            transition: opacity 0.3s ease;
+        }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        .submodal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .submodal-content img {
+            max-width: 100%;
+            max-height: 85vh;
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(200, 139, 50, 0.4);
+            opacity: 0;
+            transition: opacity 800ms ease-in-out;
+        }
+
+        .submodal-close {
+            position: absolute;
+            top: -40px; right: -40px;
+            color: var(--accent);
+            font-size: clamp(2rem, 6vw, 3rem);
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.3s, color 0.3s;
+            z-index: 3001;
+        }
+        .submodal-close:hover { transform: scale(1.2); color: #e0a96d; }
+
+        /* FOOTER */
+        footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 0.5rem 1rem;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            color: #ffffff;
+            font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+            opacity: 0;
+            transition: opacity 500ms ease;
+            z-index: 100;
+        }
+
+        footer.visible {
+            opacity: 1;
+        }
+
+        footer p {
+            color: #e2e8f0;
+        }
+
+        /* MEDIA QUERIES PARA MÓVILES */
+        @media (max-width: 768px) {
+            .submodal-close { 
+                top: -15px; 
+                right: 0px; 
+                text-shadow: 0 0 10px #000; 
+            }
+            .top-bar { 
+                flex-direction: column; 
+                gap: 0.5rem; 
+            }
+            .nav-links {
+                justify-content: center;
+            }
+            footer {
+                position: relative !important;
+                margin-top: 1.5rem;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bg-music" src="Tango_Futuro_(Lado_B).mp3" loop preload="auto"></audio>
+    <div id="bg-layer"></div>
+    <!-- Canvas para la Lluvia Matrix -->
+    <canvas id="matrix-canvas"></canvas>
+    <div id="intro-overlay"></div>
+
+    <nav class="top-bar">
+        <div class="top-bar-container">
+            <a href="https://quimerac3.github.io/" class="brand-logo" data-text="QUIMERA - Inicio General"></a>
+            <ul class="nav-links">
+                <li><a href="#" id="audio-toggle"><span style="color: #ffffff;">🎵</span> Música: OFF</a></li>
+                <li><a href="#" id="fullscreen-toggle">⛶ Pantalla Completa</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <h1>
+            <span id="header-line1"></span>
+        </h1>
+        
+        <h1 class="arrow-02-text">
+            <span id="word-quimera">
+                <span style="--i:1" class="hidden-letter">Q</span><span style="--i:2" class="hidden-letter">U</span><span style="--i:3" class="hidden-letter">I</span><span style="--i:4" class="hidden-letter">M</span><span style="--i:5" class="hidden-letter">E</span><span style="--i:6" class="hidden-letter">R</span><span style="--i:7" class="hidden-letter">A</span>
+            </span><span class="cursor" id="header-cursor"></span>
+        </h1>
+        <p data-text="El origen simbólico y conceptual que da vida e identidad a nuestro ecosistema."></p>
+    </header>
+
+    <main>
+        <div id="central-card" class="seq-card">
+            <h2><span id="card-title-text"></span><span class="cursor" id="card-cursor"></span></h2>
+        </div>
+    </main>
+
+    <div id="main-modal" class="modal-overlay">
+        <div class="modal-window" id="modal-window">
+            <h2 class="modal-title" id="modal-title"></h2>
+            <div class="modal-body" id="modal-body"></div>
+            <div class="modal-close-wrapper">
+                <span class="modal-close-btn" id="modal-close-btn"></span><span class="cursor" id="modal-cursor"></span>
+            </div>
+        </div>
+    </div>
+
+    <div id="sub-modal" class="submodal-overlay">
+        <div class="submodal-content" id="submodal-content-wrapper">
+            <span class="submodal-close" id="submodal-x-btn" onclick="closeSubModal()">&times;</span>
+            <img id="submodal-img" src="" alt="Esquema Quimera" style="opacity: 0;">
+            
+            <div class="submodal-text-window" id="submodal-text-window">
+                <h2 class="modal-title" id="sub-modal-title"></h2>
+                <div class="modal-body" id="sub-modal-body"></div>
+                <div class="modal-close-wrapper">
+                    <span class="modal-close-btn" id="sub-modal-close-btn"></span><span class="cursor" id="sub-modal-cursor"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p data-text="&bull; &copy; 2026 Instituto Quimera. &bull; Centro de Investigación, Docencia, Servicio y Difusión. &bull; Dr.C. Cesar Cerezo Camacho. &bull; Todos los derechos reservados. &bull;"></p>
+    </footer>
+
+    <script>
+        // Solución caché (bfcache)
+        window.addEventListener('pageshow', (event) => {
+            if (event.persisted) window.location.reload();
+        });
+
+        // ESTRUCTURA BASADA EN BLOQUES (CONTENT)
+        const storyData = [
+            {
+                title: "INTEGRIDAD DEL CONOCIMIENTO.",
+                content: [
+                    { type: 'p', text: "QUIMERA parte de una convicción fundamental:" },
+                    { type: 'p', text: "El conocimiento adquiere sentido cuando puede comprenderse, desarrollarse, aplicarse y compartirse." },
+                    { type: 'p', text: "Por ello, nuestro trabajo se sustenta en principios que orientan la manera en que investigamos, aprendemos, enseñamos, desarrollamos soluciones y las llevamos a contextos reales." },
+                    { type: 'p', text: "Buscamos que toda construcción de conocimiento mantenga correspondencia entre sus fundamentos, sus métodos, sus evidencias y sus conclusiones." },
+                    { type: 'p', text: "No se trata únicamente de reunir información, sino de comprender su origen, examinar su consistencia y reconocer sus límites." }
+                ]
+            },
+            {
+                title: "RIGOR METODOLÓGICO.",
+                content: [
+                    { type: 'p', text: "Toda pregunta merece un método adecuado y toda respuesta debe poder someterse a revisión." },
+                    { type: 'p', text: "QUIMERA promueve el análisis sistemático, la evaluación crítica, la trazabilidad de los procesos y la revisión continua como condiciones para construir conocimiento confiable." }
+                ]
+            },
+            {
+                title: "INTERDISCIPLINARIEDAD.",
+                content: [
+                    { type: 'p', text: "Los problemas complejos rara vez pertenecen a una sola disciplina." },
+                    { type: 'p', text: "QUIMERA integra perspectivas, lenguajes, métodos y experiencias diferentes para comprender fenómenos desde múltiples dimensiones y generar soluciones que no dependan de una sola forma de conocimiento." }
+                ]
+            },
+            {
+                title: "APRENDIZAJE PROGRESIVO.",
+                content: [
+                    { type: 'p', text: "El conocimiento no se desarrolla como una repetición de respuestas, sino como un proceso de creciente complejidad." },
+                    { type: 'p', text: "Cada respuesta permite comprender algo nuevo; cada nueva comprensión abre nuevas preguntas. Por ello, QUIMERA concibe el aprendizaje como un proceso acumulativo, progresivo, evolutivo y transferible." }
+                ]
+            },
+            {
+                title: "VINCULACIÓN ENTRE CONOCIMIENTO Y REALIDAD.",
+                content: [
+                    { type: 'p', text: "El conocimiento adquiere una dimensión práctica cuando puede relacionarse con problemas y contextos reales." },
+                    { type: 'p', text: "QUIMERA busca transformar conocimiento en capacidad, capacidad en experiencia y experiencia en nuevas formas de comprensión." }
+                ]
+            },
+            {
+                title: "INVESTIGACIÓN, DOCENCIA Y SERVICIO.",
+                content: [
+                    { type: 'p', text: "Investigar, enseñar y servir no son actividades aisladas." },
+                    { type: 'p', text: "La investigación genera conocimiento; la docencia transforma conocimiento en capacidad; el servicio permite aplicar esa capacidad en contextos reales y convertir su aplicación en experiencia." },
+                    { type: 'p', text: "Estas dimensiones se retroalimentan continuamente." }
+                ]
+            },
+            {
+                title: "DIVULGACIÓN Y COMPRENSIÓN COMPARTIDA.",
+                content: [
+                    { type: 'p', text: "El conocimiento especializado no debe permanecer aislado de quienes pueden beneficiarse de él." },
+                    { type: 'p', text: "QUIMERA busca comunicarlo con rigor, claridad y responsabilidad, transformando el conocimiento especializado —enriquecido por la experiencia— en comprensión compartida." }
+                ]
+            },
+            {
+                title: "TRANSFERENCIA.",
+                content: [
+                    { type: 'p', text: "Crear conocimiento no constituye el final del proceso." },
+                    { type: 'p', text: "QUIMERA procura que aquello que se investiga, desarrolla y aprende pueda transferirse a nuevas personas, disciplinas, contextos y problemas, ampliando su utilidad y generando nuevas posibilidades de desarrollo." }
+                ]
+            },
+            {
+                title: "RESPONSABILIDAD.",
+                content: [
+                    { type: 'p', text: "Toda forma de conocimiento implica responsabilidad sobre la manera en que se produce, comunica y utiliza." },
+                    { type: 'p', text: "QUIMERA reconoce la importancia de actuar con honestidad intelectual, respeto por las personas, conciencia del contexto y responsabilidad frente a las consecuencias de la aplicación del conocimiento." }
+                ]
+            },
+            {
+                title: "GENERACIÓN DE NUEVAS PREGUNTAS.",
+                content: [
+                    { type: 'p', text: "Una respuesta no representa necesariamente el cierre de un proceso." },
+                    { type: 'p', text: "Cuando el conocimiento entra en contacto con la realidad, aparecen nuevas relaciones, límites, contradicciones y posibilidades de investigación." },
+                    { type: 'p', text: "Por ello, QUIMERA entiende el conocimiento como un proceso abierto:" },
+                    { type: 'flow', text: "PREGUNTAR → INVESTIGAR → COMPRENDER → DESARROLLAR → APLICAR → EXPERIMENTAR → COMPARTIR → VOLVER A PREGUNTAR" },
+                    { type: 'p', text: "Así, cada respuesta se convierte en el punto de partida de una nueva etapa de conocimiento." }
+                ]
+            },
+            {
+                title: "NUESTROS PRINCIPIOS EN UNA SOLA FRASE.",
+                align: "center",
+                content: [
+                    { type: 'p', text: "RIGOR PARA COMPRENDER, CONOCIMIENTO PARA TRANSFORMAR, EXPERIENCIA PARA APRENDER, RESPONSABILIDAD PARA COMPARTIR Y PREGUNTAS PARA SEGUIR CREANDO." }
+                ]
+            }
+        ];
+
+        let currentStep = 0;
+        const centralCard = document.getElementById('central-card');
+        const cardTitleText = document.getElementById('card-title-text');
+        const cardCursor = document.getElementById('card-cursor');
+        
+        const mainModal = document.getElementById('main-modal');
+        const modalWindow = document.getElementById('modal-window');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+        const modalCursor = document.getElementById('modal-cursor');
+        
+        let isTyping = false;
+        let isCardBusy = true; 
+
+        // Generador del Código Matrix Dorado
+        let matrixInterval = null;
+        function startMatrixRain() {
+            const canvas = document.getElementById('matrix-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZカタカナアアイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+            const fontSize = 16;
+            let columns = Math.floor(canvas.width / fontSize);
+            let drops = Array(columns).fill(1);
+
+            function draw() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.font = fontSize + 'px monospace';
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars.charAt(Math.floor(Math.random() * chars.length));
+
+                    if (Math.random() > 0.88) {
+                        ctx.fillStyle = '#fffbeb';
+                    } else {
+                        ctx.fillStyle = '#c88b32';
+                    }
+
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+
+            if (matrixInterval) clearInterval(matrixInterval);
+            matrixInterval = setInterval(draw, 33);
+        }
+
+        // Función para desvanecer elementos e iniciar la lluvia Matrix
+        function triggerMatrixAndFadeElements() {
+            const bgLayer = document.getElementById('bg-layer');
+            if (bgLayer) bgLayer.style.opacity = '0';
+
+            const elementsToFade = [
+                document.getElementById('header-line1'),
+                document.querySelector('header p'),
+                document.querySelector('.top-bar'),
+                document.getElementById('central-card'),
+                document.querySelector('footer')
+            ];
+
+            elementsToFade.forEach(el => {
+                if (el) el.classList.add('fade-out-element');
+            });
+
+            startMatrixRain();
+            const canvas = document.getElementById('matrix-canvas');
+            if (canvas) canvas.style.opacity = '1';
+        }
+
+        let globalColorInterval = null;
+
+        // Función para activar el hipervínculo final (Corregida sin congelamientos GPU)
+        function enableFinalHyperlink() {
+            const wordContainer = document.getElementById('word-quimera');
+            const letters = wordContainer.querySelectorAll('span');
+            wordContainer.style.cursor = 'pointer';
+
+            const stepTime = 120;
+
+            function runSequence() {
+                let i = 0;
+                function turnCopperGold(callback) {
+                    if (i < letters.length) {
+                        letters[i].style.color = '#c88b32';
+                        i++;
+                        globalColorInterval = setTimeout(() => turnCopperGold(callback), stepTime);
+                    } else if (callback) {
+                        callback();
+                    }
+                }
+
+                let j = 0;
+                function turnWhite(callback) {
+                    if (j < letters.length) {
+                        letters[j].style.color = '#ffffff';
+                        j++;
+                        globalColorInterval = setTimeout(() => turnWhite(callback), stepTime);
+                    } else if (callback) {
+                        callback();
+                    }
+                }
+
+                turnCopperGold(() => {
+                    i = 0;
+                    turnWhite(() => {
+                        j = 0;
+                        globalColorInterval = setTimeout(runSequence, 0);
+                    });
+                });
+            }
+
+            runSequence();
+
+            wordContainer.onclick = () => {
+                clearTimeout(globalColorInterval);
+
+                // 1. Aplica un desenfoque global único al cuerpo
+                document.body.classList.add('blurring');
+
+                // 2. Transición a blanco suave utilizando el overlay
+                const overlay = document.getElementById('intro-overlay');
+                overlay.style.backgroundColor = '#ffffff';
+                overlay.style.opacity = '1';
+
+                // 3. Redirección limpia tras 1000ms
+                setTimeout(() => {
+                    window.location.href = "https://quimerac3.github.io/QuimeraC3-Q/";
+                }, 1000);
+            };
+        }
+
+        const typeCardTitle = async (text, speed = 25) => {
+            cardCursor.style.opacity = '1';
+            let currentStr = '';
+            for (let i = 0; i < text.length; i++) {
+                currentStr += text.charAt(i);
+                cardTitleText.innerHTML = currentStr;
+                await new Promise(r => setTimeout(r, speed));
+            }
+        };
+
+        const eraseCardTitle = async (speed = 15) => {
+            cardCursor.style.opacity = '1';
+            let currentStr = cardTitleText.innerHTML;
+            for (let i = currentStr.length; i >= 0; i--) {
+                cardTitleText.innerHTML = currentStr.substring(0, i);
+                await new Promise(r => setTimeout(r, speed));
+            }
+        };
+
+        const typeSection = async (element, text, speed) => {
+            let i = 0;
+            let isTag = false;
+            let currentStr = '';
+            while (i < text.length) {
+                if (!isTyping) break;
+                let char = text.charAt(i);
+                currentStr += char;
+                element.innerHTML = currentStr;
+                element.appendChild(modalCursor);
+                modalCursor.style.opacity = '1';
+
+                if (char === '<') isTag = true;
+                if (char === '>') isTag = false;
+                if (!isTag) await new Promise(r => setTimeout(r, speed));
+                i++;
+            }
+        };
+
+        const typeSubSection = async (element, text, speed, cursorElem) => {
+            let i = 0;
+            let isTag = false;
+            let currentStr = '';
+            while (i < text.length) {
+                if (!isSubTyping) break;
+                let char = text.charAt(i);
+                currentStr += char;
+                element.innerHTML = currentStr;
+                element.appendChild(cursorElem);
+                cursorElem.style.opacity = '1';
+
+                if (char === '<') isTag = true;
+                if (char === '>') isTag = false;
+                if (!isTag) await new Promise(r => setTimeout(r, speed));
+                i++;
+            }
+        };
+
+        const typeHeaderTitle = async () => {
+            const line1Text = "PRINCIPIOS";
+            const headerLine1 = document.getElementById('header-line1');
+            const wordQuimera = document.getElementById('word-quimera');
+            const headerCursor = document.getElementById('header-cursor');
+            const letterSpans = wordQuimera.querySelectorAll('.hidden-letter');
+
+            headerCursor.style.opacity = '1';
+
+            let currentStr = '';
+            for (let i = 0; i < line1Text.length; i++) {
+                currentStr += line1Text.charAt(i);
+                headerLine1.innerHTML = currentStr;
+                headerLine1.appendChild(headerCursor);
+                await new Promise(r => setTimeout(r, 30));
+            }
+
+            await new Promise(r => setTimeout(r, 120));
+
+            for (let i = 0; i < letterSpans.length; i++) {
+                letterSpans[i].classList.add('revealed');
+                wordQuimera.insertBefore(headerCursor, letterSpans[i].nextSibling);
+                await new Promise(r => setTimeout(r, 70));
+            }
+
+            headerCursor.style.opacity = '0';
+            setTimeout(() => headerCursor.remove(), 500);
+        };
+
+        centralCard.addEventListener('click', async () => {
+            if (isCardBusy) return;
+
+            if (currentStep === storyData.length - 1) {
+                triggerMatrixAndFadeElements();
+            }
+
+            document.body.classList.add('modal-blur-active');
+
+            setTimeout(async () => {
+                mainModal.classList.add('show');
+                modalWindow.classList.remove('tv-off');
+                modalTitle.innerHTML = '';
+                modalBody.innerHTML = '';
+                modalCloseBtn.innerHTML = '';
+                modalCursor.style.opacity = '0';
+                isTyping = true;
+
+                const data = storyData[currentStep];
+                
+                // Alineación personalizada según el bloque
+                modalBody.style.textAlign = data.align || 'left';
+                
+                await typeSection(modalTitle, data.title, 20);
+                if (!isTyping) return;
+                
+                for (let block of data.content) {
+                    if (!isTyping) break;
+                    
+                    const blockElem = document.createElement(block.type === 'flow' ? 'div' : 'p');
+                    
+                    if (block.type === 'flow') {
+                        blockElem.className = 'process-flow';
+                    } else {
+                        blockElem.style.marginBottom = '1rem';
+                    }
+                    
+                    modalBody.appendChild(blockElem);
+                    await typeSection(blockElem, block.text, 10);
+                }
+
+                if (!isTyping) return;
+                await typeSection(modalCloseBtn, "Cerrar.", 30);
+                
+                if(isTyping) {
+                    modalCursor.style.opacity = '1';
+                    isTyping = false;
+                }
+            }, 300);
+        });
+
+        const triggerTVClose = () => {
+            if (modalWindow.classList.contains('tv-off')) return;
+            isTyping = false; 
+            modalCursor.style.opacity = '0';
+            modalWindow.classList.add('tv-off');
+
+            setTimeout(async () => {
+                mainModal.classList.remove('show');
+                document.body.classList.remove('modal-blur-active');
+                
+                isCardBusy = true;
+                
+                if (currentStep < storyData.length - 1) {
+                    await eraseCardTitle(20);
+                    currentStep++;
+                    await typeCardTitle(storyData[currentStep].title, 30);
+                    isCardBusy = false; 
+                } else {
+                    centralCard.classList.add('tv-off-card');
+                    setTimeout(() => {
+                        centralCard.style.display = 'none';
+                        enableFinalHyperlink();
+                    }, 500); 
+                }
+            }, 600);
+        };
+
+        modalCloseBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if(!isTyping) triggerTVClose();
+        });
+
+        mainModal.addEventListener('click', (e) => {
+            if (e.target === mainModal && !isTyping) triggerTVClose();
+        });
+
+        const subModal = document.getElementById('sub-modal');
+        const subImg = document.getElementById('submodal-img');
+        const subModalTextWindow = document.getElementById('submodal-text-window');
+        const subModalXBtn = document.getElementById('submodal-x-btn');
+        const subModalTitle = document.getElementById('sub-modal-title');
+        const subModalBody = document.getElementById('sub-modal-body');
+        const subModalCloseBtn = document.getElementById('sub-modal-close-btn');
+        const subModalCursor = document.getElementById('sub-modal-cursor');
+
+        let isSubTyping = false;
+        let helicoidalSequenceRunning = false;
+
+        window.openSubModal = (imgSrc) => {
+            helicoidalSequenceRunning = false;
+            subModalTextWindow.style.display = 'none';
+            subImg.style.display = 'block';
+            subModalXBtn.style.display = 'block';
+            subImg.style.opacity = '0';
+            subImg.src = imgSrc;
+            subModal.classList.add('show');
+            
+            const triggerFadeIn = () => { setTimeout(() => { subImg.style.opacity = '1'; }, 50); };
+            if (subImg.complete) triggerFadeIn(); else subImg.onload = triggerFadeIn;
+        };
+
+        window.startHelicoidalSequence = async () => {
+            helicoidalSequenceRunning = true;
+            subModalTextWindow.style.display = 'none';
+            subImg.style.display = 'block';
+            subModalXBtn.style.display = 'block';
+            subModal.classList.add('show');
+
+            const images = ['01-borrador_T-P.png', '02-Teoria-Preg.png', '03-HECE.png', '04-MHDC.png'];
+
+            for (let i = 0; i < images.length; i++) {
+                if (!helicoidalSequenceRunning) return;
+                subImg.style.opacity = '0';
+                await new Promise(r => setTimeout(r, 800));
+                
+                if (!helicoidalSequenceRunning) return;
+                subImg.src = images[i];
+                
+                await new Promise(resolve => {
+                    if (subImg.complete) resolve();
+                    else subImg.onload = resolve;
+                });
+                
+                if (!helicoidalSequenceRunning) return;
+                subImg.style.opacity = '1';
+                await new Promise(r => setTimeout(r, 3000));
+
+                if (!helicoidalSequenceRunning) return;
+                if (i === images.length - 1) {
+                    subImg.style.opacity = '0';
+                    await new Promise(r => setTimeout(r, 800));
+                    if (!helicoidalSequenceRunning) return;
+                    showHelicoidalTextWindow();
+                    return;
+                }
+            }
+        };
+
+        const showHelicoidalTextWindow = () => {
+            subImg.style.display = 'none';
+            subModalXBtn.style.display = 'none';
+            subModalTextWindow.style.display = 'block';
+            subModalTextWindow.classList.remove('tv-off');
+            subModalTextWindow.classList.add('tv-on');
+
+            subModalTitle.innerHTML = '';
+            subModalBody.innerHTML = '';
+            subModalCloseBtn.innerHTML = '';
+            subModalCursor.style.opacity = '0';
+            isSubTyping = true;
+
+            const textContent = `Representa el conocimiento como un proceso continuo de transformación. Una teoría o comprensión previa permite interpretar la realidad, pero al enfrentarse con nuevos fenómenos surgen problemas, contradicciones o interrogantes que cuestionan sus límites.
+
+El análisis permite investigar y construir respuestas; la revisión somete esas respuestas a criterios de rigor, coherencia y evidencia; y la transferencia incorpora el nuevo conocimiento a la comprensión existente.
+
+Sin embargo, el proceso no termina con la solución. Cada problema resuelto genera nuevas preguntas, y las nuevas preguntas permiten acceder a problemas de mayor complejidad.
+
+Por ello, el conocimiento no se desarrolla en círculos que regresan al mismo punto, sino mediante una hélice ascendente: cada ciclo conserva, transforma y amplía lo aprendido, conduciendo hacia niveles progresivamente más profundos de comprensión.
+
+Resolver un problema no es el final del conocimiento; es el comienzo de una pregunta mejor.`;
+
+            setTimeout(async () => {
+                await typeSubSection(subModalTitle, "MODELO HELICOIDAL DEL DESARROLLO DEL CONOCIMIENTO.", 20, subModalCursor);
+                if (!isSubTyping) return;
+                await typeSubSection(subModalBody, textContent, 8, subModalCursor);
+                if (!isSubTyping) return;
+                await typeSubSection(subModalCloseBtn, "Cerrar.", 30, subModalCursor);
+                
+                if(isSubTyping) {
+                    subModalCursor.style.opacity = '1';
+                    isSubTyping = false;
+                }
+            }, 500);
+        };
+
+        const triggerHelicoidalTextClose = () => {
+            if (subModalTextWindow.classList.contains('tv-off')) return;
+            isSubTyping = false;
+            subModalCursor.style.opacity = '0';
+            subModalTextWindow.classList.remove('tv-on');
+            subModalTextWindow.classList.add('tv-off');
+
+            setTimeout(() => {
+                subModalTextWindow.style.display = 'none';
+                subModalTextWindow.classList.remove('tv-off');
+                
+                subImg.style.opacity = '0';
+                subImg.src = '04-MHDC.png';
+                subImg.style.display = 'block';
+                subModalXBtn.style.display = 'block';
+                
+                setTimeout(() => { subImg.style.opacity = '1'; }, 50);
+            }, 500);
+        };
+
+        subModalCloseBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (!isSubTyping) triggerHelicoidalTextClose();
+        });
+
+        window.closeSubModal = () => {
+            helicoidalSequenceRunning = false;
+            isSubTyping = false;
+            subImg.style.opacity = '0';
+            subModal.classList.remove('show');
+            
+            setTimeout(() => {
+                subModalTextWindow.style.display = 'none';
+                subModalTextWindow.classList.remove('tv-off', 'tv-on');
+            }, 500);
+        };
+
+        subModal.addEventListener('click', (e) => {
+            if (e.target === subModal) {
+                if (subModalTextWindow.style.display === 'block') {
+                    if (!isSubTyping) triggerHelicoidalTextClose();
+                } else {
+                    closeSubModal();
+                }
+            }
+        });
+
+        const music = document.getElementById('bg-music');
+        const audioToggle = document.getElementById('audio-toggle');
+        let isMusicPlaying = false;
+
+        audioToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (isMusicPlaying) {
+                music.pause();
+                audioToggle.innerHTML = '<span style="color: #ffffff;">🎵</span> Música: OFF';
+                isMusicPlaying = false;
+            } else {
+                music.play().then(() => {
+                    audioToggle.innerHTML = '<span style="color: #ffffff;">🎶</span> Música: ON';
+                    isMusicPlaying = true;
+                }).catch(error => console.log("Error de audio:", error));
+            }
+        });
+
+        const fullscreenToggle = document.getElementById('fullscreen-toggle');
+        fullscreenToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    fullscreenToggle.textContent = '❌ Salir Pantalla Completa';
+                }).catch(err => console.log("Error Fullscreen:", err));
+            } else {
+                document.exitFullscreen().then(() => {
+                    fullscreenToggle.textContent = '⛶ Pantalla Completa';
+                });
+            }
+        });
+
+        document.addEventListener('fullscreenchange', () => {
+            fullscreenToggle.textContent = !document.fullscreenElement ? '⛶ Pantalla Completa' : '❌ Salir Pantalla Completa';
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const overlay = document.getElementById('intro-overlay');
+            
+            setTimeout(() => {
+                overlay.style.backgroundColor = '#000000';
+            }, 100);
+
+            setTimeout(() => {
+                document.getElementById('bg-layer').style.opacity = '1';
+                overlay.style.opacity = '0';
+            }, 1000);
+
+            setTimeout(() => { document.querySelector('.top-bar').style.opacity = '1'; }, 2000);
+            
+            setTimeout(() => {
+                const brandLogo = document.querySelector('.brand-logo');
+                const text = brandLogo.dataset.text;
+                let i = 0;
+                function typeBrandLogo() {
+                    if (i <= text.length) {
+                        brandLogo.innerHTML = text.substring(0, i);
+                        i++;
+                        setTimeout(typeBrandLogo, 25);
+                    }
+                }
+                typeBrandLogo();
+            }, 2500);
+
+            document.querySelector('.brand-logo').addEventListener('click', (e) => {
+                e.preventDefault();
+                const overlay = document.getElementById('intro-overlay');
+                overlay.style.backgroundColor = '#ffffff';
+                overlay.style.opacity = '1';
+                
+                setTimeout(() => {
+                    window.location.href = "https://quimerac3.github.io/";
+                }, 1000);
+            });
+
+            setTimeout(() => { document.querySelector('header').style.opacity = '1'; }, 3300);
+            
+            setTimeout(async () => { await typeHeaderTitle(); }, 3600);
+
+            setTimeout(async () => {
+                const subP = document.querySelector('header p');
+                await typeSection(subP, subP.dataset.text, 15);
+            }, 5000);
+            
+            setTimeout(() => {
+                centralCard.style.display = 'block';
+                centralCard.classList.add('tv-on-card');
+                
+                setTimeout(async () => {
+                    centralCard.classList.remove('tv-on-card');
+                    await typeCardTitle(storyData[0].title, 30);
+                    isCardBusy = false;
+
+                    document.querySelector('footer').classList.add('visible');
+
+                    setTimeout(() => {
+                        const footerPs = document.querySelectorAll('footer p');
+                        let pIndex = 0;
+                        function typeFooterP() {
+                            if (pIndex >= footerPs.length) return;
+                            let p = footerPs[pIndex];
+                            let text = p.dataset.text.replace('2026', new Date().getFullYear());
+                            let i = 0;
+                            function typeChar() {
+                                if (i <= text.length) {
+                                    p.innerHTML = text.substring(0, i);
+                                    i++;
+                                    setTimeout(typeChar, 18);
+                                } else {
+                                    pIndex++;
+                                    setTimeout(typeFooterP, 100);
+                                }
+                            }
+                            typeChar();
+                        }
+                        typeFooterP();
+                    }, 600);
+
+                }, 600);
+            }, 6000); 
+        });
+    </script>
+</body>
+</html>
