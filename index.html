@@ -385,6 +385,7 @@
         .arrow-02-text {
             margin-top: 10.5rem;
             margin-bottom: 1rem;
+            transition: opacity 750ms ease;
         }
 
         #word-quimera {
@@ -396,10 +397,76 @@
             color: #ffffff;
         }
 
+        .quimera-portal-link {
+            color: inherit;
+            text-decoration: none;
+            display: inline-block;
+            pointer-events: none;
+        }
+
+        #word-quimera-container.final-portal-active {
+            position: fixed !important;
+            top: 68% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            margin: 0 !important;
+            padding: 0.25rem 0.75rem !important;
+            width: auto !important;
+            max-width: 96vw !important;
+            font-family: Georgia, "Times New Roman", serif !important;
+            text-align: center !important;
+            clip-path: none !important;
+            -webkit-clip-path: none !important;
+            filter: none !important;
+            z-index: 30000 !important;
+            pointer-events: auto !important;
+        }
+
+        #word-quimera-container.final-portal-active .quimera-portal-link {
+            display: inline-block !important;
+            pointer-events: auto !important;
+            cursor: pointer !important;
+            text-decoration: none !important;
+            outline: none;
+            white-space: nowrap !important;
+        }
+
+        #word-quimera-container.final-portal-active .quimera-portal-link:focus-visible #word-quimera {
+            outline: 2px solid #38bdf8;
+            outline-offset: 8px;
+            border-radius: 8px;
+        }
+
+        #word-quimera-container.final-portal-active #word-quimera {
+            display: inline-flex !important;
+            align-items: center;
+            justify-content: center;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(2.3rem, 8.5vw, 6rem);
+            font-weight: 900;
+            letter-spacing: 0.04em;
+            line-height: 1.15;
+            white-space: nowrap !important;
+            -webkit-text-stroke: 1.5px #000000;
+            text-shadow: 0 0 18px rgba(56, 189, 248, 0.55), 0 5px 24px rgba(0, 0, 0, 0.9);
+            filter: drop-shadow(0 0 20px rgba(200, 139, 50, 0.22));
+            transition: transform 0.25s ease, filter 0.25s ease;
+        }
+
+        #word-quimera-container.final-portal-active .quimera-portal-link:hover #word-quimera {
+            transform: none;
+            filter: drop-shadow(0 0 28px rgba(56, 189, 248, 0.75));
+        }
+
         .quimera-letter {
             display: inline-block;
             color: #ffffff;
-            transition: color 0.4s ease;
+            transition: color 0.35s ease, text-shadow 0.35s ease;
+        }
+
+        .quimera-letter.gold {
+            color: #c88b32;
+            text-shadow: 0 0 18px rgba(200, 139, 50, 0.95), 0 0 34px rgba(200, 139, 50, 0.55);
         }
 
         .subtitle-text {
@@ -671,6 +738,62 @@
             color: #e2e8f0;
         }
 
+        /* ═══════════════════════════════════════════════════════════
+           ESCENA FINAL — Clonada de index03V
+           ═══════════════════════════════════════════════════════════ */
+
+        #completion-message {
+            position: fixed;
+            top: 22%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(1100px, 92vw);
+            margin: 0;
+            text-align: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: clamp(0.95rem, 2.05vw, 1.55rem);
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.9;
+            letter-spacing: 0.055em;
+            white-space: pre-line;
+            -webkit-text-stroke: 0.55px #000000;
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.6), 0 3px 14px #000000;
+            z-index: 24905;
+            pointer-events: none;
+            opacity: 0;
+            clip-path: inset(0 100% 0 0);
+        }
+
+        #completion-message.active-laser {
+            opacity: 1;
+        }
+
+        #completion-message.revealed {
+            opacity: 1;
+            clip-path: inset(0 0 0 0);
+        }
+
+        #phrase-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 24910;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.65s ease;
+        }
+
+        body.completion-exit #word-quimera-container.final-portal-active,
+        body.completion-exit #matrix-canvas,
+        body.completion-exit #phrase-canvas,
+        body.completion-exit #completion-message {
+            filter: blur(12px);
+            opacity: 0.35;
+            transition: filter 0.8s ease, opacity 0.8s ease;
+        }
+
         @media (max-width: 900px) {
             body { height: auto; overflow-y: auto; overflow-x: hidden; }
             #bg-layer { height: 100%; background-attachment: scroll; }
@@ -678,8 +801,26 @@
             .top-bar-container { flex-direction: column; gap: 0.8rem; }
             .nav-links { justify-content: center; gap: 0.8rem; }
             header { padding: 2rem 1rem 1rem 1rem; }
+            #word-quimera-container.final-portal-active #word-quimera {
+                font-size: clamp(2.1rem, 10vw, 4.2rem) !important;
+                letter-spacing: 0.03em !important;
+                white-space: nowrap !important;
+            }
             .submodal-close { top: -15px; right: 0px; text-shadow: 0 0 10px #000; }
             footer.laser-burn-effect { position: relative !important; margin-top: 1.5rem; padding: 1rem; bottom: auto !important; left: auto !important; }
+        }
+
+        @media (max-width: 650px) {
+            #completion-message {
+                top: 18%;
+                width: 90vw;
+                font-size: clamp(0.82rem, 3.1vw, 1.08rem);
+                line-height: 1.8;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            #phrase-canvas { transition: opacity 0.4s ease; }
         }
     </style>
 </head>
@@ -717,15 +858,17 @@
         
         <!-- Contenedor con letras independientes para QUIMERA -->
         <h1 class="arrow-02-text laser-burn-effect" id="word-quimera-container" data-text="QUIMERA">
-            <span id="word-quimera">
-                <span class="quimera-letter" data-index="0">Q</span>
-                <span class="quimera-letter" data-index="1">U</span>
-                <span class="quimera-letter" data-index="2">I</span>
-                <span class="quimera-letter" data-index="3">M</span>
-                <span class="quimera-letter" data-index="4">E</span>
-                <span class="quimera-letter" data-index="5">R</span>
-                <span class="quimera-letter" data-index="6">A</span>
-            </span>
+            <a id="word-quimera-link" href="https://quimerac3.github.io/QuimeraC3-Q/" class="quimera-portal-link" tabindex="-1" aria-disabled="true">
+                <span id="word-quimera">
+                    <span class="quimera-letter" data-index="0">Q</span>
+                    <span class="quimera-letter" data-index="1">U</span>
+                    <span class="quimera-letter" data-index="2">I</span>
+                    <span class="quimera-letter" data-index="3">M</span>
+                    <span class="quimera-letter" data-index="4">E</span>
+                    <span class="quimera-letter" data-index="5">R</span>
+                    <span class="quimera-letter" data-index="6">A</span>
+                </span>
+            </a>
         </h1>
 
         <div class="subtitle-text laser-burn-effect" id="sub-text" data-text="El origen simbólico y conceptual que da vida e identidad a nuestro ecosistema.">El origen simbólico y conceptual que da vida e identidad a nuestro ecosistema.</div>
@@ -770,7 +913,16 @@
         <p id="footer-text" data-text="&bull; &copy; 2026 Instituto Quimera. &bull; Centro de Investigación, Docencia, Servicio y Difusión. &bull; Dr.C. Cesar Cerezo Camacho. &bull; Todos los derechos reservados. &bull;"></p>
     </footer>
 
+    <!-- ═══════════════════════════════════════════════════════════
+         ESCENA FINAL — Clonada de index03V
+         ═══════════════════════════════════════════════════════════ -->
+    <p id="completion-message" class="laser-burn-effect">HAS GANADO EL ACCESO AL QUINTO DE SIETE CÓDIGOS.
+GUÁRDALO, TE SERÁ ÚTIL EN UN FUTURO CERCANO.</p>
+    <canvas id="phrase-canvas" aria-hidden="true"></canvas>
+
     <script>
+        const QUIMERA_PORTAL_URL = "https://quimerac3.github.io/QuimeraC3-Q/";
+
         window.addEventListener('pageshow', (event) => {
             if (event.persisted) window.location.reload();
         });
@@ -960,67 +1112,340 @@
                 if (el) el.classList.add('fade-out-element');
             });
 
+            // Mantener QUIMERA oculta mientras el último modal esté visible hasta que desaparezca
+            const wordContainer = document.getElementById('word-quimera-container');
+            if (wordContainer) {
+                wordContainer.classList.remove('hologram-mode');
+                wordContainer.style.transition = 'none';
+                wordContainer.style.opacity = '0';
+                wordContainer.style.pointerEvents = 'none';
+            }
+
             startMatrixRain();
             const canvas = document.getElementById('matrix-canvas');
             if (canvas) canvas.style.opacity = '1';
         }
 
         let globalColorInterval = null;
+        let phraseAnimationRunning = false;
+        let finalMessageTimer = null;
+        let codeAnimationFrame = 0;
+        let completionExitStarted = false;
 
-        // Implementación del efecto de blanco a dorado (cobre) hasta que sea seleccionada
+        function navigateToQuimeraPortal(event) {
+            if (event) event.preventDefault();
+            if (completionExitStarted) return;
+            completionExitStarted = true;
+
+            if (globalColorInterval) {
+                clearTimeout(globalColorInterval);
+                globalColorInterval = null;
+            }
+            if (finalMessageTimer) {
+                clearTimeout(finalMessageTimer);
+                finalMessageTimer = null;
+            }
+
+            document.body.classList.add('completion-exit');
+            const overlay = document.getElementById('intro-overlay');
+            overlay.style.zIndex = '50000';
+            overlay.style.transition = 'opacity 1000ms ease, background-color 1000ms ease';
+            overlay.style.backgroundColor = '#ffffff';
+            overlay.style.opacity = '1';
+
+            setTimeout(() => {
+                window.location.href = QUIMERA_PORTAL_URL;
+            }, 1000);
+        }
+
         function enableFinalHyperlink() {
             const wordContainer = document.getElementById('word-quimera-container');
+            const wordLink = document.getElementById('word-quimera-link');
             const letters = document.querySelectorAll('.quimera-letter');
-            
-            wordContainer.classList.remove('hologram-mode');
-            wordContainer.style.opacity = '1';
-            wordContainer.style.pointerEvents = 'auto';
-            wordContainer.style.cursor = 'pointer';
 
-            const stepTime = 120; // Velocidad de transición entre cada letra
+            // Liberar QUIMERA del <header> (que tiene z-index:10 y filter/transition) y colocarla en <body>
+            if (wordContainer.parentElement !== document.body) {
+                document.body.appendChild(wordContainer);
+            }
+
+            wordContainer.classList.remove('fade-out-element', 'hologram-mode', 'active-laser', 'laser-burn-effect');
+            wordContainer.classList.add('final-portal-active', 'revealed');
+            wordContainer.style.clipPath = 'none';
+            wordContainer.style.opacity = '0';
+            wordContainer.style.pointerEvents = 'auto';
+
+            if (wordLink) {
+                wordLink.href = QUIMERA_PORTAL_URL;
+                wordLink.setAttribute('tabindex', '0');
+                wordLink.setAttribute('aria-disabled', 'false');
+                wordLink.setAttribute('aria-label', 'Ir a https://quimerac3.github.io/QuimeraC3-Q/');
+                wordLink.style.pointerEvents = 'auto';
+                wordLink.onclick = (e) => navigateToQuimeraPortal(e);
+            }
+
+            // Aparición natural de QUIMERA una vez que el último modal ha desaparecido
+            requestAnimationFrame(() => {
+                wordContainer.style.transition = 'opacity 750ms ease';
+                wordContainer.style.opacity = '1';
+            });
+
+            const stepTime = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 400 : 120;
 
             function runSequence() {
+                if (completionExitStarted) return;
                 let i = 0;
                 function turnCopperGold(callback) {
                     if (i < letters.length) {
+                        letters[i].classList.add('gold');
                         letters[i].style.color = '#c88b32';
                         i++;
                         globalColorInterval = setTimeout(() => turnCopperGold(callback), stepTime);
-                    } else if (callback) callback();
+                    } else if (callback) {
+                        callback();
+                    }
                 }
 
                 let j = 0;
                 function turnWhite(callback) {
                     if (j < letters.length) {
+                        letters[j].classList.remove('gold');
                         letters[j].style.color = '#ffffff';
                         j++;
                         globalColorInterval = setTimeout(() => turnWhite(callback), stepTime);
-                    } else if (callback) callback();
+                    } else if (callback) {
+                        callback();
+                    }
                 }
 
                 turnCopperGold(() => {
                     i = 0;
                     turnWhite(() => {
                         j = 0;
-                        globalColorInterval = setTimeout(runSequence, 0);
+                        if (!completionExitStarted) {
+                            globalColorInterval = setTimeout(runSequence, 0);
+                        }
                     });
                 });
             }
 
             runSequence();
 
-            wordContainer.onclick = () => {
-                clearTimeout(globalColorInterval);
-                document.body.classList.add('blurring-content');
+            // 1 segundo después de aparecer QUIMERA con su animación de colores, entra el mensaje con láser
+            if (finalMessageTimer) clearTimeout(finalMessageTimer);
+            finalMessageTimer = setTimeout(() => {
+                showFinalMessage();
+            }, 1000);
+        }
 
-                const overlay = document.getElementById('intro-overlay');
-                overlay.style.backgroundColor = '#ffffff';
-                overlay.style.opacity = '1';
+        function showFinalMessage() {
+            const msgEl = document.getElementById('completion-message');
+            if (!msgEl || completionExitStarted) return;
 
-                setTimeout(() => {
-                    window.location.href = "https://quimerac3.github.io/QuimeraC3-Q/";
-                }, 1000);
-            };
+            msgEl.textContent = "HAS GANADO EL ACCESO AL QUINTO DE SIETE CÓDIGOS.\nGUÁRDALO, TE SERÁ ÚTIL EN UN FUTURO CERCANO.";
+            msgEl.classList.remove('revealed', 'active-laser');
+            void msgEl.offsetWidth;
+            msgEl.classList.add('active-laser');
+
+            setTimeout(() => {
+                msgEl.classList.remove('active-laser');
+                msgEl.classList.add('revealed');
+                if (!completionExitStarted) {
+                    startPhraseAnimation();
+                }
+            }, 650);
+        }
+
+        function startPhraseAnimation() {
+            if (phraseAnimationRunning) return;
+            phraseAnimationRunning = true;
+
+            const canvas = document.getElementById('phrase-canvas');
+            if (!canvas) return;
+            if (codeAnimationFrame) cancelAnimationFrame(codeAnimationFrame);
+
+            const ctx = canvas.getContext('2d', { alpha: true });
+            const phrase = "QUINTO CÓDIGO: 03-19-22-03-05.";
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+
+            const measure = document.createElement('canvas').getContext('2d');
+            let fontSize = Math.min(Math.max(26, width * 0.039), 58);
+            measure.font = `900 ${fontSize}px 'Courier New', monospace`;
+            const measured = measure.measureText(phrase).width;
+            const maxWidth = width * 0.92;
+            if (measured > maxWidth && measured > 0) {
+                fontSize = Math.floor(fontSize * (maxWidth / measured));
+            }
+            const phraseY = Math.min(height * 0.45, height - 45);
+
+            const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+                && !new URLSearchParams(location.search).has('fullmotion');
+
+            if (prefersReduced) {
+                ctx.clearRect(0, 0, width, height);
+                ctx.font = `900 ${fontSize}px 'Courier New', monospace`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.shadowBlur = 22;
+                ctx.shadowColor = '#38bdf8';
+                ctx.fillStyle = '#ffffff';
+                ctx.fillText(phrase, width / 2, phraseY);
+                canvas.style.opacity = '1';
+                return;
+            }
+
+            const offCanvas = document.createElement('canvas');
+            offCanvas.width = width;
+            offCanvas.height = height;
+            const offCtx = offCanvas.getContext('2d');
+            offCtx.font = `900 ${fontSize}px 'Courier New', monospace`;
+            offCtx.textAlign = 'center';
+            offCtx.textBaseline = 'middle';
+            offCtx.fillStyle = '#ffffff';
+            offCtx.fillText(phrase, width / 2, phraseY);
+
+            const pixels = offCtx.getImageData(0, 0, width, height).data;
+            const targets = [];
+            const samplingStep = width < 600 ? 3 : 2;
+            for (let y = Math.max(0, Math.floor(phraseY - fontSize * 1.5)); y < Math.min(height, phraseY + fontSize * 1.5); y += samplingStep) {
+                for (let x = 0; x < width; x += samplingStep) {
+                    const pixelIndex = (y * width + x) * 4;
+                    if (pixels[pixelIndex + 3] > 128) targets.push({ x, y });
+                }
+            }
+            if (targets.length === 0) {
+                phraseAnimationRunning = false;
+                return;
+            }
+            for (let i = targets.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [targets[i], targets[j]] = [targets[j], targets[i]];
+            }
+
+            const particleCount = Math.min(targets.length, width < 600 ? 2800 : 5200);
+            const particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                const target = targets[i];
+                const mode = Math.random();
+                let sx, sy;
+                if (mode < 0.4) {
+                    sx = target.x + (Math.random() - 0.5) * 120;
+                    sy = -Math.random() * height * 0.35;
+                } else if (mode < 0.7) {
+                    const side = Math.random() > 0.5 ? 1 : -1;
+                    sx = width / 2 + side * (width * 0.5 + Math.random() * 300);
+                    sy = target.y + (Math.random() - 0.5) * height * 0.5;
+                } else {
+                    sx = Math.random() * width;
+                    sy = Math.random() * height;
+                }
+                const roll = Math.random();
+                const colorRGB = roll > 0.72 ? '56, 189, 248' : roll > 0.42 ? '255, 255, 255' : '200, 139, 50';
+                particles.push({
+                    sx, sy,
+                    tx: target.x, ty: target.y,
+                    delay: Math.random() * 600,
+                    duration: 1400 + Math.random() * 800,
+                    colorRGB,
+                    size: 1.4 + Math.random() * 1.6,
+                    trail: Math.random() > 0.5
+                });
+            }
+
+            canvas.style.opacity = '1';
+            const startTime = performance.now();
+            let glitchStartTime = 0, waveStartTime = 0, allArrived = false, glitchDone = false;
+            const WAVE_DURATION = 1400, GLITCH_DURATION = 320;
+
+            function draw(now) {
+                ctx.clearRect(0, 0, width, height);
+                const elapsed = now - startTime;
+                ctx.globalCompositeOperation = 'lighter';
+                let arrivedCount = 0;
+
+                for (const p of particles) {
+                    const localT = Math.max(0, elapsed - p.delay);
+                    const t = Math.min(1, localT / p.duration);
+                    const eased = 1 - Math.pow(1 - t, 3);
+                    const x = p.sx + (p.tx - p.sx) * eased;
+                    const y = p.sy + (p.ty - p.sy) * eased;
+                    if (t >= 1) arrivedCount++;
+                    if (p.trail && t < 0.95) {
+                        const trailT = Math.max(0, eased - 0.18);
+                        const tx = p.sx + (p.tx - p.sx) * trailT;
+                        const ty = p.sy + (p.ty - p.sy) * trailT;
+                        ctx.strokeStyle = `rgba(${p.colorRGB}, 0.28)`;
+                        ctx.lineWidth = p.size * 0.55;
+                        ctx.beginPath();
+                        ctx.moveTo(tx, ty);
+                        ctx.lineTo(x, y);
+                        ctx.stroke();
+                    }
+                    ctx.fillStyle = `rgba(${p.colorRGB}, 0.88)`;
+                    const particleSize = t > 0.95 ? p.size * 1.25 : p.size;
+                    ctx.fillRect(x - particleSize / 2, y - particleSize / 2, particleSize, particleSize);
+                }
+                ctx.globalCompositeOperation = 'source-over';
+
+                if (!allArrived && particleCount && arrivedCount / particleCount > 0.92) {
+                    allArrived = true;
+                    glitchStartTime = now;
+                }
+                if (allArrived && !glitchDone) {
+                    const gElapsed = now - glitchStartTime;
+                    if (gElapsed < GLITCH_DURATION) {
+                        const offset = 5 * (1 - gElapsed / GLITCH_DURATION);
+                        ctx.save();
+                        ctx.globalCompositeOperation = 'lighter';
+                        ctx.font = `900 ${fontSize}px 'Courier New', monospace`;
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillStyle = 'rgba(255, 40, 100, 0.55)';
+                        ctx.fillText(phrase, width / 2 - offset, phraseY);
+                        ctx.fillStyle = 'rgba(0, 240, 255, 0.55)';
+                        ctx.fillText(phrase, width / 2 + offset, phraseY);
+                        ctx.restore();
+                    } else {
+                        glitchDone = true;
+                        waveStartTime = now;
+                    }
+                }
+                if (waveStartTime > 0) {
+                    const wElapsed = now - waveStartTime;
+                    if (wElapsed < WAVE_DURATION) {
+                        const waveT = wElapsed / WAVE_DURATION;
+                        const waveX = -180 + (width + 360) * waveT;
+                        const gradient = ctx.createLinearGradient(waveX - 140, 0, waveX + 140, 0);
+                        gradient.addColorStop(0, 'rgba(56, 189, 248, 0)');
+                        gradient.addColorStop(0.35, 'rgba(56, 189, 248, 0.65)');
+                        gradient.addColorStop(0.5, 'rgba(255, 255, 255, 1)');
+                        gradient.addColorStop(0.65, 'rgba(56, 189, 248, 0.65)');
+                        gradient.addColorStop(1, 'rgba(56, 189, 248, 0)');
+                        ctx.save();
+                        ctx.globalCompositeOperation = 'lighter';
+                        ctx.fillStyle = gradient;
+                        ctx.fillRect(waveX - 140, phraseY - fontSize * 1.3, 280, fontSize * 2.6);
+                        ctx.restore();
+                    }
+                }
+                if (allArrived) {
+                    const pulse = 0.55 + 0.45 * Math.sin(now * 0.0028);
+                    ctx.save();
+                    ctx.globalCompositeOperation = 'lighter';
+                    ctx.font = `900 ${fontSize}px 'Courier New', monospace`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = `rgba(56, 189, 248, ${0.055 * pulse})`;
+                    ctx.shadowBlur = 32 * pulse;
+                    ctx.shadowColor = '#38bdf8';
+                    ctx.fillText(phrase, width / 2, phraseY);
+                    ctx.restore();
+                }
+                codeAnimationFrame = requestAnimationFrame(draw);
+            }
+            codeAnimationFrame = requestAnimationFrame(draw);
         }
 
         async function updateCardTitleLaser(text) {
